@@ -26,7 +26,7 @@ public class RoomBookingApplication {
 										BookingRepository bookingRepo) {
 		return args -> {
 			List<Room> rooms = roomRepo.findAll();
-			if (rooms.size() == 0) {
+			if (rooms.isEmpty()) {
 				Room blueRoom = new Room("Blue meeting room","1st Floor");
 				blueRoom.setCapacity(new LayoutCapacity(LayoutCapacity.Layout.BOARD,8));
 				blueRoom.setCapacity(new LayoutCapacity(LayoutCapacity.Layout.THEATER,16));
