@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: room-booking
+  data:
+    rest:
+      base-path: /data-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/room_booking
+    username: root
+    password: secret
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

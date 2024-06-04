@@ -1,70 +1,42 @@
 package com.anosman.roombooking.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotBlank;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank(message = "Name cannot be blank")
     private String name;
-
     @NotBlank(message = "location cannot be blank")
     private String location;
-
     @OneToMany(cascade = {CascadeType.ALL})
-    private List<LayoutCapacity> capacities;
+    @RestResource(exported = false)
+    private List<LayoutCapacity> layoutCapacity;
 
     public Room(String name, String location) {
         this.name = name;
         this.location = location;
-        capacities = new ArrayList<>();
+        layoutCapacity = new ArrayList<>();
         for (LayoutCapacity.Layout layout : LayoutCapacity.Layout.values()) {
-            capacities.add(new LayoutCapacity(layout, 0));
+            layoutCapacity.add(new LayoutCapacity(layout.getDescription(), 0));
         }
     }
-
-    public Room() { }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public List<LayoutCapacity> getCapacities() {
-        return capacities;
-    }
-
-    public void setCapacities(List<LayoutCapacity> capacities) {this.capacities = capacities;}
-
     public void setCapacity(LayoutCapacity capacity) {
-        for (LayoutCapacity lc : capacities) {
-            if (lc.getLayout() == capacity.getLayout()) {
+        for (LayoutCapacity lc : layoutCapacity) {
+            if (lc.getLayout().equalsIgnoreCase(capacity.getLayout())) {
                 lc.setCapacity(capacity.getCapacity());
             }
         }

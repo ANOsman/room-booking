@@ -1,39 +1,43 @@
 package com.anosman.roombooking.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.springframework.data.rest.core.annotation.RestResource;
 import java.sql.Date;
-import java.sql.Time;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Booking {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
+    @RestResource(exported = false)
     private Room room;
-
     @ManyToOne
+    @RestResource(exported = false)
     private User user;
 
-    private LayoutCapacity.Layout layout;
-
+    private String layout;
     private String title;
-    private Date date;
-    private Time startTime;
-    private Time endTime;
+    //@Temporal(TemporalType.DATE)
+    //@DateTimeFormat(pattern="yyyy-MM-dd")
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private Integer participants;
 
-    public Booking(Room room, User user, LayoutCapacity.Layout layout, String title, Date date, Time startTime, Time endTime, Integer participants) {
+    public Booking(Room room, User user, String title,
+                   LocalDate date, LocalTime startTime, LocalTime endTime,
+                   Integer participants) {
         this.room = room;
         this.user = user;
-        this.layout = layout;
         this.title = title;
         this.date = date;
         this.startTime = startTime;
